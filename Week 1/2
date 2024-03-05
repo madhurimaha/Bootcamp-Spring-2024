@@ -1,0 +1,20 @@
+# sorting and two pointer used 
+
+class Solution:
+    def videoStitching(self, clips: List[List[int]], time: int) -> int:
+        clips.sort(key=lambda x: x[0])
+    
+        currentEnd, nextEnd, count, i = 0, 0, 0, 0
+        n = len(clips)
+        
+        while i < n and clips[i][0] <= currentEnd:
+            while i < n and clips[i][0] <= currentEnd:
+                nextEnd = max(nextEnd, clips[i][1])  
+                i += 1
+            currentEnd = nextEnd
+            count += 1
+            
+            if currentEnd >= time:
+                return count  
+        return -1
+        
