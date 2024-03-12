@@ -1,0 +1,24 @@
+424. Longest Repeating Character Replacement
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = {}
+        max_freq = start = max_length = 0
+        
+        for end in range(len(s)):
+            count[s[end]] = count.get(s[end], 0) + 1
+            max_freq = max(max_freq, count[s[end]])
+            
+            # If the current window size minus the most frequent character count is greater than k,
+            # shrink the window from the left until the condition is satisfied.
+            while (end - start + 1) - max_freq > k:
+                count[s[start]] -= 1
+                start += 1
+            
+            max_length = max(max_length, end - start + 1)
+        
+        return max_length
+Time Complexity
+The time complexity is O(n)
+
+Space Complexity
+The space complexity is O(1)
