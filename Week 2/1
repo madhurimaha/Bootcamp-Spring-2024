@@ -1,0 +1,46 @@
+Question
+
+Implement the `myAtoi` function, which converts a string to a 32-bit signed integer, mimicking the C/C++ `atoi` function. The function should follow these rules:
+
+1. Ignore any leading whitespace.
+2. Check for a '+' or '-' sign indicating if the number is positive or negative, respectively.
+3. Read in and convert the next characters until the next non-digit character or the end of the string is reached. Ignore the rest of the string.
+4. Convert these digits into an integer. If no digits were read, then the integer is 0. Apply the determined sign or default to positive if no sign is present.
+5. If the integer is out of the 32-bit signed integer range [-2^31, 2^31 - 1], clamp it to the range.
+
+Answer
+class Solution:
+    def myAtoi(self, s: str) -> int:
+        s = s.strip()
+        if not s:
+            return 0
+        
+        sign = 1
+        if s[0] in ('-', '+'):
+            sign = -1 if s[0] == '-' else 1
+            s = s[1:]
+        
+        result = 0
+        for char in s:
+            if char.isdigit():
+                result = result * 10 + int(char)
+            else:
+                break
+        
+        result *= sign
+        
+        # Clamping to 32-bit signed integer range
+        INT_MIN, INT_MAX = -2**31, 2**31 - 1
+        if result < INT_MIN:
+            return INT_MIN
+        elif result > INT_MAX:
+            return INT_MAX
+        else:
+            return result
+
+
+Time Complexity
+The time complexity of this function is O(n), where n is the length of the string `s`. 
+
+Space Complexity
+The space complexity of this solution is O(1).
