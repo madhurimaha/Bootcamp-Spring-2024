@@ -1,0 +1,48 @@
+336. Palindrome Pairs
+You are given a 0-indexed array of unique strings words.
+
+A palindrome pair is a pair of integers (i, j) such that:
+
+0 <= i, j < words.length,
+i != j, and
+words[i] + words[j] (the concatenation of the two strings) is a 
+palindrome
+.
+Return an array of all the palindrome pairs of words.
+
+You must write an algorithm with O(sum of words[i].length) runtime complexity.
+
+Answer: 
+from typing import List
+
+class Solution:
+    def palindromePairs(self, words: List[str]) -> List[List[int]]:
+        def is_palindrome(check):
+            return check == check[::-1]
+
+        words_dict = {word[::-1]: i for i, word in enumerate(words)}
+        palindrome_pairs = []
+
+        for i, word in enumerate(words):
+            # Empty string case
+            if word == "" and word in words_dict:
+                for j, other in enumerate(words):
+                    if other == other[::-1] and other != "":
+                        palindrome_pairs.append([i, j])
+                        palindrome_pairs.append([j, i])
+
+            for j in range(len(word) + 1):
+                prefix, suffix = word[:j], word[j:]
+                
+                # Check if prefix is a palindrome and the reverse of suffix exists in the words_dict
+                if prefix in words_dict and is_palindrome(suffix) and words_dict[prefix] != i:
+                    palindrome_pairs.append([i, words_dict[prefix]])
+                
+                # Check if suffix is a palindrome and the reverse of prefix exists in the words_dict
+                # Skip j == 0 to avoid duplicates
+                if j != 0 and suffix in words_dict and is_palindrome(prefix) and words_dict[suffix] != i:
+                    palindrome_pairs.append([words_dict[suffix], i])
+        
+        return palindrome_pairs
+Time Complexity: O(n * k^2), where n is the number of words and k is the average length of the words
+Space Complexity: O(n * k), mainly for the storage of the words_dict and the output list palindrome_pairs. 
